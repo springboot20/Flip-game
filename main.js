@@ -67,6 +67,13 @@ const levelUp = () => {
     cardsContainer.appendChild(card);
   });
 
+  // Change grid layout for level 2 and beyond
+  if (level >= 2) {
+    cardsContainer.classList.add('five-columns');
+  } else {
+    cardsContainer.classList.remove('five-columns');
+  }
+
   shuffle(newLevelCards);
   resetBoard();
 };

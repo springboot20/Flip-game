@@ -55,7 +55,11 @@ body {
   width: 300px;
   height: 300px;
   gap: 1rem;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.five-columns {
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .card {
