@@ -39,7 +39,9 @@ const checkCard = () => {
     pairsFound++;
     success();
 
-    if (pairsFound === cardPairsPerLevel) levelUp;
+    if (pairsFound === getCardCountForNewLevel(level)) {
+      setTimeout(levelUp, 1000);
+    }
   } else {
     failed();
   }
@@ -81,27 +83,61 @@ const generateRandom = (length) => {
 
 const createNewCardPerLevel = (count) => {
   const cardArray = [];
+  const totalPairs = count / 2;
+
   const imgs = [
     './emojis/emoji1.jpg',
     './emojis/emoji2.jpg',
     './emojis/emoji3.jpg',
     './emojis/emoji4.jpg',
     './emojis/emoji5.jpg',
+    './emojis/emoji6.jpg',
+    './emojis/emoji7.jpg',
+    './emojis/emoji8.jpg',
+    './emojis/emoji9.jpg',
+    './emojis/emoji10.jpg',
+    './emojis/emoji11.jpg',
+    './emojis/emoji12.jpg',
   ];
 
-  for (let index = 0; index < count; index++) {
-    const card = document.createElement('div');
-    const frontImg = document.createElement('img');
-    const backImg = document.createElement('img');
+  for (let index = 0; index < totalPairs; index++) {
+    const frontImgSrc = imgs[index % imgs.length];
+    const datasetValue = `emoji${index}`;
 
-    backImg.src = './emojis/playIcon.jpg';
-    frontImg.src = imgs[generateRandom(imgs.length)];
+    // create first card of the pair
+    const card1 = document.createElement('div');
+    card1.className = 'card';
+    card1.dataset.image = datasetValue;
 
-    card.dataset = `emoji${index % (count / 2)}`;
-    card.appendChild(frontImg);
-    card.appendChild(backImg);
+    const frontImg1 = document.createElement('img');
+    frontImg1.src = frontImgSrc;
+    frontImg1.className = 'front';
 
-    cardArray.push(card);
+    const backImg1 = document.createElement('img');
+    backImg1.src = './emojis/playIcon.jpg';
+    backImg1.className = 'back';
+
+    card1.appendChild(frontImg1);
+    card1.appendChild(backImg1);
+
+    // create second card of the pair
+    const card2 = document.createElement('div');
+    card2.className = 'card';
+    card2.dataset.image = datasetValue;
+
+    const frontImg2 = document.createElement('img');
+    frontImg2.src = frontImgSrc;
+    frontImg2.className = 'front';
+
+    const backImg2 = document.createElement('img');
+    backImg2.src = './emojis/playIcon.jpg';
+    backImg2.className = 'back';
+
+    card2.appendChild(frontImg2);
+    card2.appendChild(backImg2);
+
+    // Add both cards to the array
+    cardArray.push(card1, card2);
   }
   return cardArray;
 };
@@ -126,6 +162,10 @@ function shuffle(cards) {
   });
 }
 
+() => {
+  shuffle(cards);
+};
+
 const resetGame = () => {
   score = 0;
   level = 1;
@@ -145,6 +185,8 @@ const resetGame = () => {
   shuffle(initialCards);
   resetBoard();
 };
+
+resetGame();
 
 /**
  * Event listeners
