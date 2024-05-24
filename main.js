@@ -1,11 +1,18 @@
 const cards = document.querySelectorAll('.card');
 const scoreCount = document.querySelector('.score-count');
+const levelStatusText = document.querySelector('.level-text > small');
+
+/**
+ * Game initial states
+ */
 let isFlipped = false;
 let lockBoard = false; // New variable to prevent clicking when two cards are being checked
 let firstCard, secondCard;
 let score = 0;
+let level = 1; // starting level
+let pairsFound = 0; // number of paired cards
 
-cards.forEach((card) => card.addEventListener('click', flipCard));
+let cardPairsPerLevel = 8; // sixteen card will be displayed
 
 function flipCard() {
   if (lockBoard) return; // Prevent flipping if board is locked
@@ -24,31 +31,46 @@ function flipCard() {
   checkCard();
 }
 
-function checkCard() {
+const checkCard = () => {
   let isMatch = firstCard.dataset.image === secondCard.dataset.image;
-  isMatch ? success() : failed();
-}
+  if (isMatch) {
+    score++;
+    pairsFound++;
+    success();
 
-function success() {
+    if (pairsFound === cardPairsPerLevel) levelUp;
+  } else {
+    failed();
+  }
+};
+
+const success = () => {
   firstCard.removeEventListener('click', flipCard);
   secondCard.removeEventListener('click', flipCard);
-  score++;
-  scoreCount.textContent = score; // Replace instead of append
+  scoreCount.innerHTML = score; // Replace instead of append
   resetBoard();
-}
+};
 
-function failed() {
+const levelUp = () => {
+  level++;
+  pairsFound = 0;
+  levelStatusText.innerHTML = level;
+  shuffle();
+  resetBoard();
+};
+
+const failed = () => {
   setTimeout(() => {
     firstCard.classList.remove('flip');
     secondCard.classList.remove('flip');
     resetBoard();
   }, 1000);
-}
+};
 
-function resetBoard() {
+const resetBoard = () => {
   [isFlipped, lockBoard] = [false, false];
   [firstCard, secondCard] = [null, null];
-}
+};
 
 function shuffle() {
   cards.forEach((card) => {
@@ -61,17 +83,27 @@ function shuffle() {
   shuffle();
 })();
 
-document.getElementById('btn').addEventListener('click', () => {
-  resetGame();
-});
-
-function resetGame() {
+const resetGame = () => {
   score = 0;
+  level = 0;
+  pairsFound = 0;
+
   scoreCount.innerHTML = score;
+  levelStatusText.innerHTML = level;
+
   cards.forEach((card) => {
     card.classList.remove('flip');
     card.addEventListener('click', flipCard);
   });
   shuffle();
   resetBoard();
-}
+};
+
+/**
+ * Event listeners
+ */
+
+cards.forEach((card) => card.addEventListener('click', flipCard));
+document.getElementById('btn').addEventListener('click', () => {
+  resetGame();
+});
