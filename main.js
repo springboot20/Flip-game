@@ -1,6 +1,7 @@
 const cards = document.querySelectorAll('.card');
 const scoreCount = document.querySelector('.score-count');
 const levelStatusText = document.querySelector('.level-text > small');
+const cardsContainer = document.querySelector('.cards-container');
 
 /**
  * Game initial states
@@ -55,8 +56,54 @@ const levelUp = () => {
   level++;
   pairsFound = 0;
   levelStatusText.innerHTML = level;
-  shuffle();
+
+  const newCardCount = getCardCountForNewLevel(level) * cardPairsPerLevel;
+  const newLevelCards = createNewCardPerLevel(newCardCount);
+
+  newLevelCards.forEach((card) => {
+    card.addEventListener('click', flipCard);
+    cardsContainer.appendChild(card);
+  });
+
+  shuffle(newLevelCards);
   resetBoard();
+};
+
+const getCardCountForNewLevel = (level) => {
+  const basePairs = cardPairsPerLevel; // Start with 8 pairs (16 cards) at level 1
+  const additionalPairsPerLevel = 2; // Add 2 pairs (4 cards) per level
+  return basePairs + (level - 1) * additionalPairsPerLevel;
+};
+
+const generateRandom = (length) => {
+  return Math.floor(Math.random() * length);
+};
+
+const createNewCardPerLevel = (count) => {
+  const cardArray = [];
+  const imgs = [
+    './emojis/emoji1.jpg',
+    './emojis/emoji2.jpg',
+    './emojis/emoji3.jpg',
+    './emojis/emoji4.jpg',
+    './emojis/emoji5.jpg',
+  ];
+
+  for (let index = 0; index < count; index++) {
+    const card = document.createElement('div');
+    const frontImg = document.createElement('img');
+    const backImg = document.createElement('img');
+
+    backImg.src = './emojis/playIcon.jpg';
+    frontImg.src = imgs[generateRandom(imgs.length)];
+
+    card.dataset = `emoji${index % (count / 2)}`;
+    card.appendChild(frontImg);
+    card.appendChild(backImg);
+
+    cardArray.push(card);
+  }
+  return cardArray;
 };
 
 const failed = () => {
@@ -72,30 +119,30 @@ const resetBoard = () => {
   [firstCard, secondCard] = [null, null];
 };
 
-function shuffle() {
+function shuffle(cards) {
   cards.forEach((card) => {
     let index = Math.floor(Math.random() * cards.length);
     card.style.order = index;
   });
 }
 
-(() => {
-  shuffle();
-})();
-
 const resetGame = () => {
   score = 0;
-  level = 0;
+  level = 1;
   pairsFound = 0;
 
-  scoreCount.innerHTML = score;
-  levelStatusText.innerHTML = level;
+  scoreCount.innerHTML = `${score}`;
+  levelStatusText.innerHTML = `${level}`;
 
-  cards.forEach((card) => {
-    card.classList.remove('flip');
+  cardsContainer.innerHTML = ''; // Remove all existing cards
+  const initialCardCount = getCardCountForNewLevel(level) * 2; // Calculate initial number of cards
+  const initialCards = createNewCardPerLevel(initialCardCount); // Create initial cards
+
+  initialCards.forEach((card) => {
     card.addEventListener('click', flipCard);
+    cardsContainer.appendChild(card);
   });
-  shuffle();
+  shuffle(initialCards);
   resetBoard();
 };
 
