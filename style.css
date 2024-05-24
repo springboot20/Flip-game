@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   background: rgb(66, 66, 66);
 }
 
@@ -22,6 +22,25 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.score-screen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.score-screen .level-status p {
+  color: #ffff;
+  font-size: 1.75rem;
+  line-height: 1rem;
+  font-weight: bold;
+}
+
+.level-status p > small {
+  display: inline-block;
+  font-size: 1.85rem;
+  line-height: 1rem;
 }
 
 .score-screen .score-text {
