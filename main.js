@@ -162,16 +162,9 @@ const resetBoard = () => {
   [firstCard, secondCard] = [null, null];
 };
 
-function shuffle(cards) {
-  cards.forEach((card) => {
-    let index = Math.floor(Math.random() * cards.length);
-    card.style.order = index;
-  });
-}
-
-() => {
+(() => {
   shuffle(cards);
-};
+})();
 
 const resetGame = () => {
   score = 0;
@@ -203,3 +196,22 @@ cards.forEach((card) => card.addEventListener('click', flipCard));
 document.getElementById('btn').addEventListener('click', () => {
   resetGame();
 });
+
+function shuffle(cards) {
+  // Add shuffling class to all cards
+  cards.forEach((card) => card.classList.add('shuffling'));
+
+  // Wait for the shuffle animation to complete
+  setTimeout(() => {
+    // Remove shuffling class from all cards
+    cards.forEach((card) => card.classList.remove('shuffling'));
+
+    // Shuffle the cards
+    cards.forEach((card) => {
+      let index = Math.floor(Math.random() * cards.length);
+      card.style.order = index;
+    });
+  }, 500);
+}
+
+// Call shuffleCards function where needed, e.g., at the start of the game or when proceeding to the next level
