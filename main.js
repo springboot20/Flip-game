@@ -64,7 +64,7 @@ const levelUp = () => {
   levelStatusText.innerHTML = level;
 
   // Change grid layout for level 2 and beyond
-  if (level >= 2) {
+  if (level === 2) {
     cardsContainer.classList.add('five-columns');
   } else {
     cardsContainer.classList.remove('five-columns');
@@ -161,6 +161,8 @@ const createNewCardPerLevel = (count) => {
 };
 
 const failed = () => {
+  cards.forEach((card) => card.removeEventListener('click', flip));
+
   setTimeout(() => {
     firstCard.classList.remove('flip');
     secondCard.classList.remove('flip');
@@ -171,6 +173,7 @@ const failed = () => {
 const resetBoard = () => {
   [isFlipped, lockBoard] = [false, false];
   [firstCard, secondCard] = [null, null];
+  cardsContainer.classList.remove('five-columns');
 };
 
 (() => {
@@ -209,20 +212,9 @@ document.getElementById('btn').addEventListener('click', () => {
 });
 
 function shuffle(cards) {
-  // Add shuffling class to all cards
-  cards.forEach((card) => card.classList.add('shuffling'));
-
-  // Wait for the shuffle animation to complete
-  setTimeout(() => {
-    // Remove shuffling class from all cards
-    cards.forEach((card) => card.classList.remove('shuffling'));
-
-    // Shuffle the cards
-    cards.forEach((card) => {
-      let index = Math.floor(Math.random() * cards.length);
-      card.style.order = index;
-    });
-  }, 500);
+  // Shuffle the cards
+  cards.forEach((card) => {
+    let index = Math.floor(Math.random() * cards.length);
+    card.style.order = index;
+  });
 }
-
-// Call shuffleCards function where needed, e.g., at the start of the game or when proceeding to the next level

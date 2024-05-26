@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="bootstrap.min.css" />
     <link rel="stylesheet" href="./style.css" />
     <title>Flip Card Game</title>
   </head>
@@ -13,25 +12,35 @@
     <div class="gameContainer">
       <div class="container">
         <h1>How is your memory</h1>
+        <button type="button" class="resetBtn" id="btn">Reset Board</button>
       </div>
 
       <div class="game-section">
         <div class="score-screen">
           <p class="score-text">
-            Score :
-            <small class="score-count">0</small>
+            Score
+            <span class="score-count badge badge-success">0</span>
+          </p>
+
+          <p class="highScore">
+            High Score
+            <span id="highScore" class="badge badge-primary">0</span>
+          </p>
+
+          <p class="chancesLeft">
+            Chances Left
+            <span id="chancesLeft" class="badge badge-danger">0</span>
           </p>
 
           <div class="level-status">
             <p class="level-text">
-              Level :
-              <small class="level-count">1</small>
+              Level
+              <small class="level-count badge badge-info">1</small>
             </p>
           </div>
         </div>
 
         <div class="cards-container"></div>
-        <button type="button" class="resetBtn" id="btn">Reset Board</button>
       </div>
     </div>
     <script src="./main.js"></script>

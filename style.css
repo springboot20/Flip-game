@@ -19,7 +19,6 @@ body {
   align-items: center;
   width: 100%;
   max-width: 550px;
-  margin: auto;
 }
 
 .game-section {
@@ -36,24 +35,54 @@ body {
   width: 100%;
 }
 
-.score-screen .level-status p {
+.level-status p,
+.score-text,
+.chancesLeft,
+.highScore {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
   color: #ffffff;
-  font-size: 1.75rem;
+  font-size: 1.25rem;
   line-height: 1rem;
-  font-weight: bold;
+  font-weight: 500;
 }
 
-.level-status p > small {
+.badge {
   display: inline-block;
-  font-size: 1.85rem;
-  line-height: 1rem;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  -webkit-border-radius: 0.25rem;
+  -moz-border-radius: 0.25rem;
+  -ms-border-radius: 0.25rem;
+  -o-border-radius: 0.25rem;
 }
 
-.score-screen .score-text {
-  color: #ffffff;
-  font-size: 1.75rem;
-  line-height: 1rem;
-  font-weight: bold;
+.badge-primary {
+  color: #084298;
+  background-color: #cfe2ff;
+}
+
+.badge-success {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.badge-danger {
+  color: #fff;
+  background-color: #dc3545;
+}
+
+.badge-info {
+  background-color: #0dcaf0;
+  border-color: #0dcaf0;
 }
 
 .cards-container {
@@ -69,8 +98,8 @@ body {
   grid-template-columns: repeat(7, 1fr);
 }
 
-.five-columns .card{
-    height: 7rem;
+.five-columns .card {
+  height: 7rem;
 }
 
 .card {
@@ -121,16 +150,28 @@ body {
   transform: rotateY(180deg);
 }
 
+.notification-container {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .container {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+  justify-content: space-between;
   text-align: center;
   color: #ffffff;
   font-size: 14px;
   font-weight: bold;
+  width: 100%;
 }
 
 .resetBtn {
   margin-top: 2rem;
-  padding: 0.75rem 0.75rem;
+  padding: 0.7rem 0.75rem;
   border: 1px solid transparent;
   border-radius: 0.54rem;
   color: #ffffff;
@@ -143,7 +184,7 @@ body {
 
 @media (max-width: 600px) {
   .cards-container {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .five-columns {
@@ -153,23 +194,5 @@ body {
   .score-screen .level-status p,
   .score-screen .score-text {
     font-size: 1.25rem;
-  }
-}
-
-@keyframes shuffle {
-  0% {
-    transform: translateY(0) rotate(0);
-  }
-  25% {
-    transform: translateY(-10px) rotate(5deg);
-  }
-  50% {
-    transform: translateY(10px) rotate(-5deg);
-  }
-  75% {
-    transform: translateY(-10px) rotate(5deg);
-  }
-  100% {
-    transform: translateY(0) rotate(0);
   }
 }
