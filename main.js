@@ -54,18 +54,14 @@ const success = () => {
   resetBoard();
 };
 
+const clearExistingCardsOnLevelUp = (cardsContainer) => {
+  cardsContainer.innerHTML = null;
+};
+
 const levelUp = () => {
   level++;
   pairsFound = 0;
   levelStatusText.innerHTML = level;
-
-  const newCardCount = getCardCountForNewLevel(level) * cardPairsPerLevel;
-  const newLevelCards = createNewCardPerLevel(newCardCount);
-
-  newLevelCards.forEach((card) => {
-    card.addEventListener('click', flipCard);
-    cardsContainer.appendChild(card);
-  });
 
   // Change grid layout for level 2 and beyond
   if (level >= 2) {
@@ -74,7 +70,22 @@ const levelUp = () => {
     cardsContainer.classList.remove('five-columns');
   }
 
+  // clear existing cards on leveling up
+  clearExistingCardsOnLevelUp(cardsContainer);
+
+  const newCardCount = getCardCountForNewLevel(level) * cardPairsPerLevel;
+  const newLevelCards = createNewCardPerLevel(newCardCount);
+
+  // add new set of cards to the containers
+  newLevelCards.forEach((card) => cardsContainer.appendChild(card));
+
+  // Reattach click event for the new set of cards
+  newLevelCards.forEach((card) => card.addEventListener('click', flipCard));
+
+  // shuffle the cards i.e rearrange them
   shuffle(newLevelCards);
+
+  // reset the game board
   resetBoard();
 };
 
