@@ -2,6 +2,10 @@ const cards = document.querySelectorAll('.card');
 const scoreCount = document.querySelector('.score-count');
 const levelStatusText = document.querySelector('.level-text > small');
 const cardsContainer = document.querySelector('.cards-container');
+const chanceEl = document.querySelector('.chancesLeft > span');
+const highScoreEl = document.querySelector('.highScore > span');
+
+let maximumLevel = 6;
 
 /**
  * Game initial states
@@ -12,8 +16,25 @@ let firstCard, secondCard;
 let score = 0;
 let level = 1; // starting level
 let pairsFound = 0; // number of paired cards
+let chanceLeft = 10; // number of trier if two pair of card did not matched
+let highScore = 0;
+let cardPairsPerLevel = 6; // sixteen card will be displayed
+let highScoreInterval;
 
-let cardPairsPerLevel = 8; // sixteen card will be displayed
+const startHighScoreCounter = () => {
+  highScore = 0;
+
+  clearInterval(highScoreInterval);
+
+  highScoreInterval = setInterval(() => {
+    highScore++;
+    highScoreEl.innerText = highScore;
+  }, 100);
+};
+
+const stopHighScoreCounter = () => {
+  clearInterval(highScoreInterval);
+};
 
 function flipCard() {
   if (lockBoard) return; // Prevent flipping if board is locked
@@ -64,7 +85,7 @@ const levelUp = () => {
   levelStatusText.innerHTML = level;
 
   // Change grid layout for level 2 and beyond
-  if (level === 2) {
+  if (level >= 3) {
     cardsContainer.classList.add('five-columns');
   } else {
     cardsContainer.classList.remove('five-columns');
@@ -73,8 +94,10 @@ const levelUp = () => {
   // clear existing cards on leveling up
   clearExistingCardsOnLevelUp(cardsContainer);
 
-  const newCardCount = getCardCountForNewLevel(level) * cardPairsPerLevel;
+  const newCardCount = getCardCountForNewLevel(level) * 2;
   const newLevelCards = createNewCardPerLevel(newCardCount);
+
+  console.log(newLevelCards);
 
   // add new set of cards to the containers
   newLevelCards.forEach((card) => cardsContainer.appendChild(card));
@@ -163,6 +186,9 @@ const createNewCardPerLevel = (count) => {
 const failed = () => {
   cards.forEach((card) => card.removeEventListener('click', flip));
 
+  chanceLeft--;
+  chanceEl.innerHTML = chanceLeft;
+
   setTimeout(() => {
     firstCard.classList.remove('flip');
     secondCard.classList.remove('flip');
@@ -173,22 +199,25 @@ const failed = () => {
 const resetBoard = () => {
   [isFlipped, lockBoard] = [false, false];
   [firstCard, secondCard] = [null, null];
-  cardsContainer.classList.remove('five-columns');
 };
 
 (() => {
   shuffle(cards);
+  chanceEl.innerHTML = chanceLeft;
 })();
 
 const resetGame = () => {
   score = 0;
   level = 1;
   pairsFound = 0;
+  highScoreEl.innerHTML = 0;
 
   scoreCount.innerHTML = `${score}`;
   levelStatusText.innerHTML = `${level}`;
+  cardsContainer.classList.remove('five-columns'); // Ensure five-columns is removed when the game resets
 
   cardsContainer.innerHTML = ''; // Remove all existing cards
+
   const initialCardCount = getCardCountForNewLevel(level) * 2; // Calculate initial number of cards
   const initialCards = createNewCardPerLevel(initialCardCount); // Create initial cards
 
@@ -196,11 +225,16 @@ const resetGame = () => {
     card.addEventListener('click', flipCard);
     cardsContainer.appendChild(card);
   });
+  startHighScoreCounter();
   shuffle(initialCards);
   resetBoard();
 };
 
 resetGame();
+
+const gameOver = () => {
+  if (chanceLeft === 0) alert('Game Over');
+};
 
 /**
  * Event listeners
