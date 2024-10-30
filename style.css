@@ -18,7 +18,7 @@ body {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 35rem;
 }
 
 .game-section {
@@ -88,8 +88,8 @@ body {
 .cards-container {
   display: grid;
   width: 100%;
-  gap: 1rem;
-  grid-template-columns: repeat(4, 1fr);
+  gap: .75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   max-height: 80vh;
   overflow-y: auto;
 }
@@ -104,17 +104,12 @@ body {
 
 .card {
   width: 100%;
-  height: 9rem;
-  transform: scale(0.95);
+  height: 8rem;
   transform-style: preserve-3d;
-  transition: transform 0.3s;
   position: relative;
+  transition: transform 0.3s;
   cursor: pointer;
   background-color: transparent;
-  -webkit-transform: scale(0.95);
-  -moz-transform: scale(0.95);
-  -ms-transform: scale(0.95);
-  -o-transform: scale(0.95);
 }
 
 .card:active {
@@ -183,6 +178,10 @@ body {
 }
 
 @media (max-width: 600px) {
+  .card {
+    height: 7rem;
+  }
+
   .cards-container {
     grid-template-columns: repeat(3, 1fr);
   }
